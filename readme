@@ -1,0 +1,42 @@
+# Dashboard Project
+
+## Overview
+
+This is a responsive, interactive dashboard built using HTML, CSS, and JavaScript. The dashboard features a clean and modern UI design with sections for profile management, appointments, notifications, and a sidebar for navigation. The design adapts seamlessly across different screen sizes, ensuring a great user experience on desktop, tablet, and mobile devices.
+
+## Features
+
+- **Responsive Sidebar**: A fixed sidebar with a linear gradient background, which can collapse on smaller screens (mobile and tablet).
+- **Profile Section**: Display user profile with the option to update information.
+- **Appointment Management**: List and manage upcoming appointments with an option to edit or cancel.
+- **Notifications**: Displays notifications with the ability to clear them.
+- **Live Time**: Displays the current time using an interactive clock.
+- **Interactive Cards**: Cards that show various statistics (e.g., users, revenue, tasks) with hover animations.
+- **Charts and Maps**: Includes placeholder sections for charts and embedded maps.
+- **Filter and Sorting**: Allows filtering and sorting of data in tables.
+
+## Technologies Used
+
+- **HTML**: The structure of the dashboard, including the sidebar and main content.
+- **CSS**: Custom styling with a focus on responsiveness, layout design, and hover effects.
+- **JavaScript**: Used for dynamic elements like live time display, toggles, and other interactions.
+- **Media Queries**: Ensures the layout adapts for different screen sizes, ranging from mobile to desktop.
+- **Icons**: Utilized from the FontAwesome library for better UI and interaction.
+
+## Project Structure
+
+- `index.html`: The main HTML file, including structure and static content.
+- `styles.css`: Contains all the CSS rules for styling the dashboard, including layouts, buttons, and media queries for responsiveness.
+- `script.js`: Handles interactivity such as toggling sidebar visibility, updating live time, and managing notifications.
+
+## How to Use
+
+1. Clone this repository to your local machine:
+   ```bash
+   git clone <repository_url>
+
+
+
+Developed by P.Venkateswarlu
+contact no: +91 6302603176
+email: pathivenkateswarlu592@gmail.com

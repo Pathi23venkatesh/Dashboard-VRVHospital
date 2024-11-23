@@ -1,0 +1,430 @@
+<html>
+
+<head>
+    <title>VRV Hospitals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Include Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Include Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="dash.css">
+    
+</head>
+
+<body>
+    <div class="sidebar">
+        <div>
+            <div class="logo">
+                <a href="1.html" style="text-decoration: none; color: inherit;">
+                    <b>VRV Hospitals</b>
+                </a>
+            </div>
+            <div class="toggle-container">
+                <span id="toggleStatus">Status: Check-In</span>
+                <div class="toggle-switch" onclick="toggleStatus()"></div>
+            </div>
+            
+            <div class="menu" style="margin-top: 40px;">
+                <a href="#" class="active" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i>
+                    Dashboard</a>
+                <a href="#" onclick="showSection('patientProfiles')"><i class="fas fa-user"></i> User Profiles</a>
+                <a href="#" onclick="showSection('appointmentSchedule')"><i class="fas fa-calendar-alt"></i> Appointment
+                    Schedule</a>
+                <a href="#" onclick="showSection('clinicLocations')"><i class="fas fa-map-marker-alt"></i> Clinic
+                    Locations</a>
+                <a href="#" onclick="showSection('notifications')"><i class="fas fa-bell"></i> Notifications</a>
+                <a href="#" onclick="showSection('logout')"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+        <!-- <div class="upgrade">
+            <a href="#">Upgrade To PRO</a>
+        </div> -->
+
+    </div>
+    <div class="main-content">
+        <div class="filter-bar">
+            <input type="text" id="searchBar" placeholder="Search by name..." oninput="filterContent()">
+            <select id="sortOptions" onchange="sortContent()">
+                <option value="nameAsc">Sort by Name (A-Z)</option>
+                <option value="nameDesc">Sort by Name (Z-A)</option>
+                <option value="dateAsc">Sort by Date (Earliest)</option>
+                <option value="dateDesc">Sort by Date (Latest)</option>
+            </select>
+            <select id="filterOptions" onchange="filterByStatus()">
+                <option value="all">Filter by Status</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="completed">Completed</option>
+                <option value="canceled">Canceled</option>
+            </select>
+        </div>
+        <div class="header">
+            
+
+           
+            
+            <h1>Dashboard</h1>
+            <div class="search">
+                <!-- <input type="text" placeholder="Search..." class="search-input"> -->
+                <div class="icons">
+                    <!-- <i class="fas fa-search icon"></i> -->
+                    <!-- <i class="fas fa-th icon"></i> -->
+                    <!-- <i class="fas fa-bell icon"></i> -->
+                    <!-- <i class="fas fa-user icon"></i> -->
+                </div>
+                <div class="live-time-container">
+                    <i class="fas fa-clock clock-icon"></i> <!-- Clock icon -->
+                    <span class="live-time" id="liveTime"></span> <!-- Live time -->
+                </div>
+            </div>
+        </div>
+        <div id="dashboard" class="content-section active">
+            <div class="cards">
+                <div class="card">
+                    <div class="icon" style="color: #ff9800;"><i class="fas fa-procedures"></i></div>
+                    <div class="title">Surgeries Performed</div>
+                    <div class="value">120</div>
+                    <div class="footer">This Month</div>
+                </div>
+                <div class="card">
+                    <div class="icon" style="color: #4caf50;"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="title">Revenue</div>
+                    <div class="value">$150,000</div>
+                    <div class="footer">This Month</div>
+                </div>
+                <div class="card">
+                    <div class="icon" style="color: #f44336;"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="title">Complications</div>
+                    <div class="value">5</div>
+                    <div class="footer">This Month</div>
+                </div>
+                <div class="card">
+                    <div class="icon" style="color: #00bcd4;"><i class="fas fa-user-plus"></i></div>
+                    <div class="title">New Patients</div>
+                    <div class="value">30</div>
+                    <div class="footer">This Month</div>
+                </div>
+            </div>
+            <div class="cards">
+                <div class="chart-card">
+                    <div class="title">Monthly Surgeries</div>
+                    <div class="chart-container">
+                        <canvas id="monthlySurgeriesChart" class="chart"></canvas>
+                    </div>
+                    <!-- <div class="footer">Surgeries performed each month</div> -->
+                </div>
+                <div class="chart-card">
+                    <div class="title">Revenue Growth</div>
+                    <div class="chart-container">
+                        <canvas id="revenueGrowthChart" class="chart"></canvas>
+                    </div>
+                    <!-- <div class="footer">Revenue growth over the year</div> -->
+                </div>
+                <div class="chart-card">
+                    <div class="title">Patient Satisfaction</div>
+                    <div class="chart-container">
+                        <canvas id="patientSatisfactionChart" class="chart"></canvas>
+                    </div>
+                    <!-- <div class="footer">Patient satisfaction ratings</div> -->
+                </div>
+            </div>
+            <br>
+            <br>
+        </div>
+        <div id="patientProfiles" class="content-section">
+            <h2>Patient Profiles</h2>
+            <p>Here you can manage patient profiles, view their medical history, and update their information.</p>
+
+            <!-- Profile Section -->
+<div id="profileView" class="profile-section">
+    <h3>Profile Information</h3>
+    <div class="profile-info">
+        <div class="profile-image">
+            <img id="profileImg" src="profile.jpg" alt="Profile Image" class="profile-icon">
+        </div>
+        <p><strong>Name:</strong> <span id="profileName">Venkatesh</span></p>
+        <p><strong>Email:</strong> <span id="profileEmail">Venkatesh@example.com</span></p>
+        <p><strong>Phone:</strong> <span id="profilePhone">+1234567890</span></p>
+        <p><strong>Address:</strong> <span id="profileAddress">1336 Telangana, Hyderabad</span></p>
+    </div>
+    <button id="updateProfileBtn" class="update-btn">Update Profile</button>
+</div>
+
+<!-- Update Profile Section (Initially Hidden) -->
+<div id="updateSection" class="update-section" style="display: none;">
+    <h3>Update Profile Information</h3>
+    <form id="updateForm">
+        <label for="updateImg">Profile Image:</label>
+        <input type="file" id="updateImg" accept="image/*">
+
+        <label for="updateName">Name:</label>
+        <input type="text" id="updateName" value="Venkatesh" required>
+        <span id="nameError" class="error-message"></span>
+        <br>
+
+        <label for="updateEmail">Email:</label>
+        <input type="email" id="updateEmail" value="Venkatesh@example.com" required>
+        <span id="emailError" class="error-message"></span>
+        <br>
+        <label for="updatePhone">Phone:</label>
+        <input type="tel" id="updatePhone" value="+1234567890" required>
+        <span id="phoneError" class="error-message"></span>
+        <br>
+        <label for="updateAddress">Address:</label>
+        <textarea id="updateAddress" required>Telangana, Hyderabad</textarea>
+        <span id="addressError" class="error-message"></span>
+        <br>
+        <button type="submit" class="update-submit-btn">Save Changes</button>
+    </form>
+    <button id="cancelUpdateBtn" class="cancel-btn">Cancel</button>
+</div>
+        </div>
+
+
+        <div id="appointmentSchedule" class="content-section">
+            <h2>Appointment Schedule</h2>
+            <p>Manage and view upcoming appointments, schedule new appointments, and send reminders to patients.</p>
+
+            <!-- Appointment List -->
+            <div id="appointmentList" class="appointment-list">
+                <h3>Upcoming Appointments</h3>
+                <ul>
+                    <!-- Sample Appointment Items -->
+                    <li class="appointment-item" id="appointment1">
+                        <div class="appointment-details">
+                            <div class="appointment-info">
+                                <strong>Patient:</strong> <span>Venkatesh</span><br>
+                                <strong>Appointment:</strong> <span>Consultation</span><br>
+                                <strong>Date & Time:</strong> <span class="appointment-date">2024-12-10</span> <span
+                                    class="appointment-time">10:00 AM</span><br>
+                                <strong>Status:</strong> <span class="status">Scheduled</span>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="edit-btn" onclick="editAppointment('appointment1')">Edit</button>
+                                <button class="cancel-btn" onclick="cancelAppointment('appointment1')">Cancel</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="appointment-item" id="appointment2">
+                        <div class="appointment-details">
+                            <div class="appointment-info">
+                                <strong>Patient:</strong> <span>Masthan</span><br>
+                                <strong>Appointment:</strong> <span>Follow-up</span><br>
+                                <strong>Date & Time:</strong> <span class="appointment-date">2024-12-12</span> <span
+                                    class="appointment-time">2:00 PM</span><br>
+                                <strong>Status:</strong> <span class="status">Scheduled</span>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="edit-btn" onclick="editAppointment('appointment2')">Edit</button>
+                                <button class="cancel-btn" onclick="cancelAppointment('appointment2')">Cancel</button>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- More appointments can be added here -->
+                </ul>
+            </div>
+
+            <!-- Edit Appointment Section (Initially Hidden) -->
+            <div id="editAppointmentSection" class="edit-appointment-section">
+                <h3>Edit Appointment</h3>
+                <form id="editAppointmentForm">
+                    <label for="patientName">Patient Name:</label>
+                    <input type="text" id="patientName" value="Venkatesh" disabled>
+
+                    <label for="appointmentDate">Date:</label>
+                    <input type="date" id="appointmentDate" required>
+
+                    <label for="appointmentTime">Time:</label>
+                    <input type="time" id="appointmentTime" required>
+
+                    <button type="submit" class="save-btn">Save Changes</button>
+                    <button type="button" class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+                </form>
+            </div>
+            <div id="noAppointmentsMessage" style="display: none;">
+                <p>No appointments left, <a href="#bookNowLink" id="bookNowLink">Book Now</a></p>
+            </div>
+
+        </div>
+
+        <div id="clinicLocations" class="content-section">
+            <h2>Clinic Locations</h2>
+            <p>View and manage clinic locations, contact information, and operating hours.</p>
+
+            <!-- Embedded Google Map -->
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d487293.47787204565!2d78.07836299470652!3d17.41273323120619!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb99daeaebd2c7%3A0xae93b78392bafbc2!2sHyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1732085916393!5m2!1sen!2sin"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+
+        <div id="notifications" class="content-section">
+            <h2>Notifications</h2>
+            <p>View and manage notifications, alerts, and messages from patients and staff.</p>
+            <!-- Notifications list -->
+            <div id="notificationList">
+                <div class="notification-item" id="notif1">
+                    <p>Patient Venkatesh has successfully scheduled an appointment.</p>
+                    <button class="clear-btn" onclick="clearNotification('notif1')">✖</button>
+                </div>
+                <div class="notification-item" id="notif2">
+                    <p>Appointment with Dr.Masthan has been rescheduled to 3:00 PM.</p>
+                    <button class="clear-btn" onclick="clearNotification('notif2')">✖</button>
+                </div>
+                <div class="notification-item" id="notif3">
+                    <p>New message received from Nurse komali regarding patient care.</p>
+                    <button class="clear-btn" onclick="clearNotification('notif3')">✖</button>
+                </div>
+                <!-- More random notifications can be added here -->
+            </div>
+
+            <!-- Clear All Button -->
+            <button id="clearAllBtn" onclick="clearAllNotifications()">Clear All</button>
+
+            <!-- No notifications message -->
+            <p id="noNotificationsMessage" style="display:none; font-style: italic; color: gray;">No notifications to
+                see</p>
+
+        </div>
+
+        <div id="logout" class="content-section">
+            <!-- <h2>Logout</h2> -->
+             <center>
+            <p>Are you sure you want to logout?</p>
+
+            <div class="logout-buttons">
+                <button id="confirmLogout" class="btn-yes">Yes</button>
+                <button id="cancelLogout" class="btn-no">No</button>
+            </div>
+        </center>
+        </div>
+    </div>
+
+
+
+</body>
+<script src="dash.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const appointments = [
+            {
+                id: "appointment1",
+                patient: "Venkatesh",
+                type: "Consultation",
+                date: "2024-12-10",
+                time: "10:00 AM",
+                status: "Scheduled",
+            },
+            {
+                id: "appointment2",
+                patient: "Masthan",
+                type: "Follow-up",
+                date: "2024-12-12",
+                time: "2:00 PM",
+                status: "Scheduled",
+            },
+            {
+                id: "appointment3",
+                patient: "Komali",
+                type: "Routine Check",
+                date: "2024-11-25",
+                time: "11:00 AM",
+                status: "Completed",
+            },
+        ];
+
+        const appointmentList = document.getElementById("appointmentList");
+        const searchBar = document.getElementById("searchBar");
+        const sortOptions = document.getElementById("sortOptions");
+        const filterOptions = document.getElementById("filterOptions");
+
+        function renderAppointments(list) {
+            const ul = document.createElement("ul");
+            ul.className = "appointments-container";
+
+            if (list.length === 0) {
+                appointmentList.innerHTML = "<p>No appointments found.</p>";
+                return;
+            }
+
+            list.forEach((appointment) => {
+                const li = document.createElement("li");
+                li.className = "appointment-item";
+                li.innerHTML = `
+                    <div class="appointment-details">
+                        <div class="appointment-info">
+                            <strong>Patient:</strong> <span>${appointment.patient}</span><br>
+                            <strong>Appointment:</strong> <span>${appointment.type}</span><br>
+                            <strong>Date & Time:</strong> <span class="appointment-date">${appointment.date}</span> 
+                            <span class="appointment-time">${appointment.time}</span><br>
+                            <strong>Status:</strong> <span class="status">${appointment.status}</span>
+                        </div>
+                    </div>
+                `;
+                ul.appendChild(li);
+            });
+
+            appointmentList.innerHTML = "";
+            appointmentList.appendChild(ul);
+        }
+
+        function filterContent() {
+            const query = searchBar.value.toLowerCase();
+            const filteredAppointments = appointments.filter((appointment) =>
+                appointment.patient.toLowerCase().includes(query)
+            );
+            renderAppointments(filteredAppointments);
+        }
+
+        function sortContent() {
+            const option = sortOptions.value;
+            const sortedAppointments = [...appointments];
+
+            if (option === "nameAsc") {
+                sortedAppointments.sort((a, b) =>
+                    a.patient.localeCompare(b.patient)
+                );
+            } else if (option === "nameDesc") {
+                sortedAppointments.sort((a, b) =>
+                    b.patient.localeCompare(a.patient)
+                );
+            } else if (option === "dateAsc") {
+                sortedAppointments.sort((a, b) =>
+                    new Date(a.date) - new Date(b.date)
+                );
+            } else if (option === "dateDesc") {
+                sortedAppointments.sort((a, b) =>
+                    new Date(b.date) - new Date(a.date)
+                );
+            }
+
+            renderAppointments(sortedAppointments);
+        }
+
+        function filterByStatus() {
+            const status = filterOptions.value;
+            const filteredAppointments =
+                status === "all"
+                    ? appointments
+                    : appointments.filter(
+                          (appointment) => appointment.status === status
+                      );
+            renderAppointments(filteredAppointments);
+        }
+
+        // Attach event listeners
+        searchBar.addEventListener("input", filterContent);
+        sortOptions.addEventListener("change", sortContent);
+        filterOptions.addEventListener("change", filterByStatus);
+
+        // Initial rendering of appointments
+        renderAppointments(appointments);
+    });
+</script>
+
+
+</html>
